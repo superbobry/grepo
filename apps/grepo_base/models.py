@@ -41,7 +41,7 @@ class Language(models.Model):
 
 
 class Repository(models.Model):
-    url = models.URLField(_("url"), max_length=255)
+    url = models.URLField(_("url"), max_length=255, unique=True)
     name = models.CharField(_("name"), max_length=255)
     score = models.FloatField(_("score"), max_length=255,
         help_text=_("`grepo` score for this repository, the bigger the "
