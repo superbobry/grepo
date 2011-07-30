@@ -10,11 +10,13 @@ from .models import Language, Repository
 
 
 class RepositoryAdmin(admin.ModelAdmin):
-    list_filter = ["languages", "source", "updated_at"]
+    list_filter = ["languages", "updated_at"]
     list_display = ["name", "url_with_link", "all_languages", "score",
                     "updated_at"]
     list_per_page = 25
     list_select_related = True
+
+    search_fields = ["language__name", "name", "summary", "url"]
 
     def url_with_link(self, instance):
         return urlize(instance.url)
