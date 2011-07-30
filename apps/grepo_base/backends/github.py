@@ -62,16 +62,13 @@ class GithubBackend(object):
                                              repository["created_at"])
                     updated = parse_gh_datetime(updated)
 
-                    out = {
+                    yield {
                         "url": repository["url"],
                         "name": repository["name"],
-                        "language": repository["language"],
+                        "languages": [repository["language"]],
+                        "source": 0,
+                        "score": repository["score"],
                         "summary": repository.get("description", ""),
                         "updated_at": updated,
-                        "created_at": created,
-                        "open_issues": repository["open_issues"],
-                        "watchers": repository["watchers"],
-                        "forks": repository["forks"],
-                        "score": repository["score"]
+                        "created_at": created
                     }
-                    yield out
