@@ -120,8 +120,8 @@ CELERY_TASK_RESULT_EXPIRES = 20
 # -- grepo_base
 
 GREPO_BACKENDS = [
-    "grepo_base.backends.github",
-    "grepo_base.backends.lp",
+    "grepo_base.backends.github.GithubBackend",
+    "grepo_base.backends.lp.LaunchpadBackend",
 ]
 
 
