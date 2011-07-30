@@ -47,7 +47,7 @@ class Repository(models.Model):
         help_text=_("`grepo` score for this repository, the bigger the "
                     "value -- the more help is needed."))
     source = models.SmallIntegerField(_("source"), choices=SOURCES)
-    language = models.ForeignKey(Language, related_name="repositories")
+    languages = models.ManyToManyField(Language, related_name="repositories")
     summary = models.TextField(_("summary"), blank=True, null=True,
         help_text=_("project summary, to help the users find what they"
                      "want."))
