@@ -7,6 +7,9 @@ from datetime import timedelta
 
 from celery.decorators import periodic_task, task
 
+from grepo_base.backends import get_backends
+from grepo_base.models import Repository
+
 
 @task
 def update_backend(backend):

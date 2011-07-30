@@ -5,15 +5,15 @@
 
     Github.com backend for `grepo`.
 """
+
 import itertools
+
 from httplib import HTTPConnection
-from datetime import datetime
+from dateutil import parser
 
-from django.conf import settings
 from django.utils import simplejson as json
-import math
 
-from grepo_base.models import Repository, Language
+from grepo_base.models import Language
 
 
 #: Github api search path
@@ -22,63 +22,53 @@ SEARCH_PATH = "/api/v2/json/repos/search/language:{lang}?start_page={page}"
 GITHUB = "github.com"
 
 
-def fetch(language, page):
-    connection = HTTPConnection(GITHUB)
-    connection.request("GET", SEARCH_PATH.format(lang=language, page=page))
-    response = connection.getresponse()
-    foo = response.read()
-    return foo
+parse_gh_datetime = parser.parse
 
 
-def list():
-    """Yields all repositories one by one."""
-    for language in Language.objects.all():
-        for page in itertools.count(1):
-            data = fetch(language.name, page)
-            repositories = json.loads(data)["repositories"]
+class GithubBackend(object):
 
-            if not repositories:
-                break
+    def __init__(self):
+        self.response = None
 
-            for repository in repositories:
-                if not repository["language"]:
-                    continue
+    def fetch(self, language, page):
+        connection = HTTPConnection(GITHUB)
+        connection.request("GET", SEARCH_PATH.format(lang=language, page=page))
+        self.response = connection.getresponse()
+        self.data = self.response.read()
 
-                # Note: `source` and `language` field should be handled
-                # by the caller.
+    def __iter__(self):
+        """Yields all repositories one by one."""
+        for language in Language.objects.all():
+            for page in itertools.count(1):
+                self.fetch(language.name, page)
+                repositories = json.loads(self.data)["repositories"]
 
-                # If there is no "updated_at" field in api output,
-                # then repository wasn't ever updated and `updated_at`
-                # equals to `created_at`
-                updated = repository.get("updated_at",
-                                         repository["created_at"])
-                yield {
-                    "url": repository["url"],
-                    "name": repository["name"],
-                    "language": repository["language"],
-                    "summary": repository["description"],
-                    "score": calculate_repository_score(repository),
-                    "updated_at": updated,
-                    "created_at": repository["created_at"]
-                }
+                if not repositories:
+                    break
 
+                for repository in repositories:
+                    if not repository["language"]:
+                        continue
 
-def update(repository):
-    return repository  # A simple pass-through for now.
+                    # Note: `source` and `language` field should be handled
+                    # by the caller.
 
+                    created = parse_gh_datetime(repository["created_at"])
 
-def calculate_repository_score(data):
-    """Calculates and returns Grepo-score for a given repository.
+                    # If there is no "updated_at" field in api output,
+                    # then repository wasn't ever updated and `updated_at`
+                    # equals to `created_at`
+                    updated = repository.get("updated_at",
+                                             repository["created_at"])
+                    updated = parse_gh_datetime(updated)
 
-    .. todo:: query for pull requests and add them to the exponent
-              argument.
-    """
-    parse = lambda d: datetime.strptime(d, "%Y/%m/%dT %H:%M:%S %z")
-
-    data.update(
-        created_at=parse(data["created_at"]),
-        pushed_at=parse(data["pushed_at"])
-    )
-
-    return (data["created_at"] - data["pushed_at"]).days * \
-        data["open_issues"] / math.log10(data["watchers"] + data["forks"])
+                    yield {
+                        "url": repository["url"],
+                        "name": repository["name"],
+                        "languages": [repository["language"]],
+                        "source": 0,
+                        "score": repository["score"],
+                        "summary": repository.get("description", ""),
+                        "updated_at": updated,
+                        "created_at": created
+                    }
