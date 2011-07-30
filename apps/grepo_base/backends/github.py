@@ -5,15 +5,16 @@
 
     Github.com backend for `grepo`.
 """
+
+import math
 import itertools
+
 from httplib import HTTPConnection
 from datetime import datetime
 
-from django.conf import settings
 from django.utils import simplejson as json
-import math
 
-from grepo_base.models import Repository, Language
+from grepo_base.models import Language
 
 
 #: Github api search path
