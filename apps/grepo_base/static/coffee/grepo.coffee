@@ -62,8 +62,14 @@ grepo.dispatch = (command, term) ->
       return term.error(xhr.stderr) if xhr.stderr
       return term.echo (xhr.stdout) if xhr.stdout
 
-      $.getJSON "/query/", xhr.options, (xhr) ->
-        # render results.
+      $.getJSON "/search/", xhr.options, (xhr) ->
+        repositories = xhr.repositories
+
+        if not repositories.length
+          term.echo "We got nothing for you at the moment <_<"
+        else
+          term.echo xhr.repositories.join("\n\n")
+
 
 
 $ ->

@@ -7,9 +7,7 @@ import opster
 from annoying.decorators import ajax_request
 from django.conf import settings
 from django.db.models import Q
-from django.http import HttpResponseBadRequest
 from django.utils.translation import ugettext as _
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET
 
 from grepo_base.models import Language
@@ -48,7 +46,6 @@ def stub(*args, **kwargs):
 
 
 @require_GET
-@csrf_exempt
 @ajax_request
 def parse(request):
     stdout = StringIO()
