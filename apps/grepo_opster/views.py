@@ -1,4 +1,13 @@
 # -*- coding: utf-8 -*-
+"""
+    grepo_opster.views
+    ~~~~~~~~~~~~~~~~~~
+
+    This module implements a tiny wrapper around :mod:`opster` for
+    validating `grepo` input, why? because all of the JavaScript
+    implementation are either heavily Node.js-based or simply not
+    usable.
+"""
 
 import random
 from cStringIO import StringIO
@@ -19,10 +28,6 @@ opster.sysname = lambda *args: settings.GREPO_NAME
 @opster.command(options=settings.GREPO_OPTIONS,
                 usage=settings.GREPO_USAGE)
 def stub(*args, **kwargs):
-    """A stub command, validating `grepo` input, why? because all of
-    the JavaScript implementation are either heavily Node.js-based or
-    simply not usable.
-    """
     language = kwargs["language"].title()
     if not language:
         raise opster.Abort(
