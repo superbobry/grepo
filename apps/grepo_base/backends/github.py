@@ -25,48 +25,51 @@ GITHUB = "github.com"
 parse_gh_datetime = parser.parse
 
 
-def fetch(language, page):
-    connection = HTTPConnection(GITHUB)
-    connection.request("GET", SEARCH_PATH.format(lang=language, page=page))
-    response = connection.getresponse()
-    foo = response.read()
-    return foo
+class GithubBackend(object):
 
+    def __init__(self):
+        self.response = None
 
-def list():
-    """Yields all repositories one by one."""
-    for language in Language.objects.all():
-        for page in itertools.count(1):
-            data = fetch(language.name, page)
-            repositories = json.loads(data)["repositories"]
+    def fetch(self, language, page):
+        connection = HTTPConnection(GITHUB)
+        connection.request("GET", SEARCH_PATH.format(lang=language, page=page))
+        self.response = connection.getresponse()
+        self.data = self.response.read()
 
-            if not repositories:
-                break
+    def __iter__(self):
+        """Yields all repositories one by one."""
+        for language in Language.objects.all():
+            for page in itertools.count(1):
+                self.fetch(language.name, page)
+                repositories = json.loads(self.data)["repositories"]
 
-            for repository in repositories:
-                if not repository["language"]:
-                    continue
+                if not repositories:
+                    break
 
-                # Note: `source` and `language` field should be handled
-                # by the caller.
+                for repository in repositories:
+                    if not repository["language"]:
+                        continue
 
-                created = parse_gh_datetime(repository["created_at"])
-                # If there is no "updated_at" field in api output,
-                # then repository wasn't ever updated and `updated_at`
-                # equals to `created_at`
-                updated = repository.get("updated_at",
-                                         repository["created_at"])
-                updated = parse_gh_datetime(updated)
-                out = {
-                    "url": repository["url"],
-                    "name": repository["name"],
-                    "language": repository["language"],
-                    "summary": repository.get("description", ""),
-                    "updated_at": updated,
-                    "created_at": created,
-                    "open_issues": repository["open_issues"],
-                    "watchers": repository["watchers"],
-                    "forks": repository["forks"],
-                    "score": repository["score"]
-                }
-                yield out
+                    # Note: `source` and `language` field should be handled
+                    # by the caller.
+
+                    created = parse_gh_datetime(repository["created_at"])
+                    # If there is no "updated_at" field in api output,
+                    # then repository wasn't ever updated and `updated_at`
+                    # equals to `created_at`
+                    updated = repository.get("updated_at",
+                                             repository["created_at"])
+                    updated = parse_gh_datetime(updated)
+                    out = {
+                        "url": repository["url"],
+                        "name": repository["name"],
+                        "language": repository["language"],
+                        "summary": repository.get("description", ""),
+                        "updated_at": updated,
+                        "created_at": created,
+                        "open_issues": repository["open_issues"],
+                        "watchers": repository["watchers"],
+                        "forks": repository["forks"],
+                        "score": repository["score"]
+                    }
+                    yield out
