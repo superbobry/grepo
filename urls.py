@@ -8,7 +8,7 @@ from django.views.generic.simple import direct_to_template
 admin.autodiscover()
 
 urlpatterns = patterns("",
-    url(r"^$", direct_to_template, {"template": "index.html"}),
+    url(r"", include("grepo_base.urls")),
     url(r"^opster/$", include("grepo_opster.urls")),
     url(r"^admin/", include(admin.site.urls)),
 ) + staticfiles_urlpatterns()

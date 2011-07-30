@@ -27,6 +27,7 @@ class Language(models.Model):
     class Meta:
         verbose_name = _("language")
         verbose_name_plural = _("languages")
+        ordering = ["slug"]
 
     def __unicode__(self):
         return self.name
@@ -41,7 +42,7 @@ class Language(models.Model):
 
 
 class Repository(models.Model):
-    url = models.CharField(_("url"), max_length=255)
+    url = models.URLField(_("url"), max_length=255)
     name = models.CharField(_("name"), max_length=255)
     score = models.FloatField(_("score"), max_length=255,
         help_text=_("`grepo` score for this repository, the bigger the "
@@ -51,15 +52,16 @@ class Repository(models.Model):
     summary = models.TextField(_("summary"), blank=True, null=True,
         help_text=_("project summary, to help the users find what they"
                      "want."))
-    created_at = models.DateTimeField(_("created"))
-    updated_at = models.DateTimeField(_("updated"))
+    created_at = models.DateField(_("created"))
+    updated_at = models.DateField(_("updated"))
 
     class Meta:
         verbose_name = _("repository")
         verbose_name_plural = _("repositories")
+        ordering = ["-score", "updated_at"]
 
     def __unicode__(self):
-        return self.url
+        return self.name
 
     def save(self, *args, **kwargs):
         self.updated_at = datetime.now()
