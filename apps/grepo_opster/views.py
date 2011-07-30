@@ -25,7 +25,7 @@ def stub(*args, **kwargs):
     the JavaScript implementation are either heavily Node.js-based or
     simply not usable.
     """
-    language = kwargs["language"]
+    language = kwargs["language"].title()
     if not language:
         raise opster.Abort(
             _("sorry, can't grepo anything without a language :(")
@@ -44,6 +44,9 @@ def stub(*args, **kwargs):
              .format(language, hint)
         )
 
+    return kwargs
+
+
 @require_GET
 @csrf_exempt
 @ajax_request
@@ -56,7 +59,8 @@ def parse(request):
     opster.write.func_defaults = (stdout, )
     opster.err = lambda text: opster.write(text, out=stderr)
 
-    stub(argv=request.GET.getlist("argv[]"))
+    options = stub(argv=request.GET.getlist("argv[]"))
 
-    return {"stderr": stderr.getvalue(),
+    return {"options": options,
+            "stderr": stderr.getvalue(),
             "stdout": stdout.getvalue()}

@@ -59,8 +59,11 @@ grepo.dispatch = (command, term) ->
     term.error "command not found: #{name}"
   else
     $.getJSON "/opster/", argv: argv, (xhr) ->
-      term.error(xhr.stderr) if xhr.stderr
-      term.echo (xhr.stdout) if xhr.stdout
+      return term.error(xhr.stderr) if xhr.stderr
+      return term.echo (xhr.stdout) if xhr.stdout
+
+      $.getJSON "/query/", xhr.options, (xhr) ->
+        # render results.
 
 
 $ ->
