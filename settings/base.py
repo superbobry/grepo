@@ -1,15 +1,12 @@
-# Django settings for grepo project.
+# -*- coding: utf-8 -*-
 
 import sys
-import os
 
 import djcelery
+from unipath import FSPath as Path
 
-rel = lambda *chunks: os.path.join(os.path.abspath(os.path.dirname(__file__)),
-                                  *chunks)
-
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(PROJECT_ROOT, "apps"))
+PROJECT_ROOT = Path(__file__).absolute().ancestor(2)
+sys.path.insert(0, PROJECT_ROOT.child("apps"))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -20,24 +17,13 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": rel("dev.db"),
-        "USER": "",
-        "PASSWORD": "",
-        "HOST": "",
-        "PORT": "",
-    }
-}
-
 TIME_ZONE = None
 LANGUAGE_CODE = "en-us"
 SITE_ID = 1
 USE_I18N = True
 USE_L10N = True
 
-STATIC_ROOT = os.path.join(PROJECT_ROOT, "static")
+STATIC_ROOT = PROJECT_ROOT.child("static")
 STATIC_URL = "/static/"
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
@@ -71,7 +57,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = "urls"
 
 TEMPLATE_DIRS = (
-    os.path.join(PROJECT_ROOT, "templates"),
+    PROJECT_ROOT.child("templates"),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -118,25 +104,20 @@ LOGGING = {
     }
 }
 
-# django-celery configuration
+# -- django-celery
+
 CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 
 BROKER_USER = ""
 BROKER_PASSWORD = ""
 BROKER_BACKEND = "redis"
-BROCKER_HOST = "localhost"
-BROKER_PORT = 6379
-
-REDIS_CONNECT_RETRY = True
-REDIS_HOST = "localhost"
-REDIS_PORT = 6379
-REDIS_DB = 0
 
 CELERY_SEND_EVENTS = True
-CELERY_RESULT_BACKEND = 'redis'
+CELERY_RESULT_BACKEND = "redis"
 CELERY_TASK_RESULT_EXPIRES = 20
 
 djcelery.setup_loader()
+
 
 # -- grepo_base
 GREPO_LANGUAGES = [
@@ -148,9 +129,9 @@ GREPO_BACKENDS = []
 
 # -- grepo_opster
 GREPO_NAME = "grepo"
-GREPO_USAGE = "%name -L LANGUAGE [-n] RESULTS [KEYWORDS]"
+GREPO_USAGE = "%name -l LANGUAGE [-o] RESULTS [KEYWORDS]"
 GREPO_OPTIONS = [
-    ("L", "language", "brainfuck",
+    ("l", "language", "",
       "programming language you want to grepo for"),
-    ("n", "results", 20, "maximum number of projects to look up"),
+    ("o", "only", 20, "maximum number of projects to look up"),
 ]
