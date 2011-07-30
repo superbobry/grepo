@@ -68,8 +68,9 @@ $ ->
     exit: false
     keydown: grepo.complete
 
+  grepo.el.mousewheel (event, delta) ->
+    $(if delta > 0 then "#up" else "#down").click()
+
   $("#down").click -> grepo.el.scroll(  12 * 5 )
   $("#up").click   -> grepo.el.scroll(-(12 * 5))
-
-
 
