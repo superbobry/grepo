@@ -24,14 +24,30 @@ grepo.match = (language) ->
 
 grepo.complete = (event, term) ->
   if event.keyCode is 9   # Try to auto-complete on TAB.
-    options = grepo.parse term.get_command()
+    command = term.get_command()
+    [command..., key, value] = command.split /\s+/
 
-    if options? and options.language?
-      # a) auto-complete language
-      if not options.keywords.length
-        term.set_command "grepo -l #{grepo.match options.language} "
+    if key[0] isnt "-"
+      command.push key
+
+      # seems like we have a -fBAR case.
+      if value[0] is "-"
+        [key, value] = [value.substring(0, 2), value.substring(2)]
+      # okay, complete keyword
       else
         # query the server for the closest matching tag.
+        return
+
+    # complete an argument.
+    switch key
+      when "-n"
+        value = parseInt(value or "10", 10) * 2
+      when "-l"
+        value = grepo.match(value)
+
+    command.push key
+    command.push value
+    term.set_command command.join(" ")
 
     return no
 
