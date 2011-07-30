@@ -114,11 +114,29 @@ LOGGING = {
     }
 }
 
+# django-celery configuration
+CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
+
+BROKER_USER = ""
+BROKER_PASSWORD =""
+BROKER_BACKEND="redis"
+BROCKER_HOST = "localhost"
+BROKER_PORT = 6379
+
+REDIS_CONNECT_RETRY = True
+REDIS_HOST = "localhost"
+REDIS_PORT=6379
+REDIS_DB = 0
+
+CELERY_SEND_EVENTS=True
+CELERY_RESULT_BACKEND='redis'
+CELERY_TASK_RESULT_EXPIRES =  20
+
+djcelery.setup_loader()
+
 # -- grepo_base
 GREPO_LANGUAGES = [
     "python",
     "io",
 ]
 GREPO_BACKENDS = []
-
-djcelery.setup_loader()
