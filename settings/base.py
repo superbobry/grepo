@@ -104,6 +104,7 @@ LOGGING = {
     }
 }
 
+
 # -- django-celery
 
 CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
@@ -120,14 +121,19 @@ djcelery.setup_loader()
 
 
 # -- grepo_base
+
 GREPO_LANGUAGES = [
     "io",
     "erlang"
 ]
-GREPO_BACKENDS = []
+GREPO_BACKENDS = [
+    "grepo_base.backends.github",
+    "grepo_base.backends.lp",
+]
 
 
 # -- grepo_opster
+
 GREPO_NAME = "grepo"
 GREPO_USAGE = "%name -l LANGUAGE [-o] RESULTS [KEYWORDS]"
 GREPO_OPTIONS = [
