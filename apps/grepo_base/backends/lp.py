@@ -48,7 +48,7 @@ class LaunchpadBackend(object):
             'name': name,
             'created_at': project.date_created,
             'summary': project.summary,
-            'score': calculate_score(),
+            'score': self.calculate_score(),
             'source': 1,
             'languages': language_list,
         }
