@@ -12,7 +12,7 @@ from .models import Language, Repository
 class RepositoryAdmin(admin.ModelAdmin):
     list_filter = ["languages", "source", "updated_at"]
     list_display = ["name", "url_with_link", "all_languages", "score",
-                    "updated_at", "source"]
+                    "updated_at"]
     list_per_page = 25
     list_select_related = True
 

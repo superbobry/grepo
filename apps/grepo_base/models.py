@@ -13,12 +13,6 @@ from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
 
 
-#: Available repository sources, should be populated on the fly, from
-#: ``settings.GREPO_BACKENDS`` variable.
-SOURCES = [(0, "github.com"),
-           (1, "launchpad.net")]
-
-
 class Language(models.Model):
     name = models.CharField(_("name"), max_length=80)
     slug = models.CharField(_("slug"), max_length=40, blank=True)
@@ -46,7 +40,6 @@ class Repository(models.Model):
     score = models.FloatField(_("score"), max_length=255,
         help_text=_("`grepo` score for this repository, the bigger the "
                     "value -- the more help is needed."))
-    source = models.SmallIntegerField(_("source"), choices=SOURCES)
     languages = models.ManyToManyField(Language, related_name="repositories")
     summary = models.TextField(_("summary"), blank=True, null=True,
         help_text=_("project summary, to help the users find what they"
