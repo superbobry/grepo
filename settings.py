@@ -3,6 +3,8 @@
 import sys
 import os
 
+import djcelery
+
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(PROJECT_ROOT, "apps"))
 
@@ -89,6 +91,7 @@ INSTALLED_APPS = (
     "django.contrib.admin",
 
     "south",
+    "djcelery",
 
     "grepo_base",
     "grepo_opster",
@@ -112,6 +115,25 @@ LOGGING = {
     }
 }
 
+# django-celery configuration
+CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
+
+BROKER_USER = ""
+BROKER_PASSWORD =""
+BROKER_BACKEND="redis"
+BROCKER_HOST = "localhost"
+BROKER_PORT = 6379
+
+REDIS_CONNECT_RETRY = True
+REDIS_HOST = "localhost"
+REDIS_PORT=6379
+REDIS_DB = 0
+
+CELERY_SEND_EVENTS=True
+CELERY_RESULT_BACKEND='redis'
+CELERY_TASK_RESULT_EXPIRES =  20
+
+djcelery.setup_loader()
 
 # -- grepo_base
 GREPO_LANGUAGES = [
