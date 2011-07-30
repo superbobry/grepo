@@ -4,7 +4,7 @@
 import string
 from launchpadlib.launchpad import Launchpad
 from django.conf import settings
-from grepo_base.models import Repository
+from grepo_base.models import Repository, Language
 
 LAUNCHPAD_URL = 'https://launchpad.net/'
 
@@ -18,31 +18,12 @@ STATES = (
     'Triaged'
 )
 
-LANGUAGES = set([
-    'python',
-    'c++',
-    'java',
-    'php',
-    'ruby',
-    'c',
-    'perl',
-    'c#',
-    'bash',
-    'lisp',
-    'vala',
-    'javascript',
-    'lua',
-    'pascal',
-    'ada',
-    'ocaml',
-    'delphi',
-    'erlang'
-])
+LANGUAGES = Language.objects.all().values_list('name', flat=True)
 
 launchpad = Launchpad.login_anonymously('grepo', 'production')
 
 def get_repos():
-    for project in launchpad.projects[:1000]:
+    for project in launchpad.projects[:100]:
         # We only add projects with recognizable
         # programming languages
         if not hasattr(project, 'programming_language'):
@@ -61,10 +42,11 @@ def get_project_info(name, language_list):
     info['created_at'] = project.date_created
     info['summary'] = project.summary
     info['url'] = LAUNCHPAD_URL + name
-    info['language'] = language_list
     info['score'] = 0
     info['source'] = 1
-    #Repository.objects.create(**info)
+    repo = Repository.objects.create(**info)
+    repo.languages = language_list
+    repo.save()
 
 def get_last_updated(project):
     '''Date of the last commit to project branches'''
@@ -77,11 +59,16 @@ def get_last_updated(project):
     return updated_at
 
 def get_issues_number(project, states=STATES):
-    num = sum(1 for bug in project.searchTasks(status=states))
+    '''Count all active tasks for the project
+    
+    This is going to affect grepo-score supposedly.
+    '''
+    num = sum(1 for task in project.searchTasks(status=states))
     return num
 
 def guess_language(language):
-    language = language.strip().lower()
+    '''Try to guess a proper language name based on user input'''
+    language = language.strip().title()
     if language in LANGUAGES:
         return language
     # Try non-exact match, doesn't work for C :(
@@ -108,5 +95,6 @@ def get_project_languages(language_string):
         language = guess_language(l)
         if language:
             language_list.append(language)
-
-    return set(language_list)
+    
+    language_list = [Language.objects.get(name=l) for l in set(language_list)]
+    return language_list
