@@ -11,6 +11,7 @@ from datetime import datetime
 
 from django.conf import settings
 from django.utils import simplejson as json
+import math
 
 from grepo_base.models import Repository, Language
 
@@ -45,14 +46,20 @@ def list():
 
                 # Note: `source` and `language` field should be handled
                 # by the caller.
+
+                # If there is no "updated_at" field in api output,
+                # then repository wasn't ever updated and `updated_at`
+                # equals to `created_at`
+                updated = repository.get("updated_at",
+                                         repository["created_at"])
                 yield {
                     "url": repository["url"],
                     "name": repository["name"],
                     "language": repository["language"],
                     "summary": repository["description"],
                     "score": calculate_repository_score(repository),
-                    "updated_at": datetime.utcnow(),
-                    "created_at": datetime.utcnow()
+                    "updated_at": updated,
+                    "created_at": repository["created_at"]
                 }
 
 
