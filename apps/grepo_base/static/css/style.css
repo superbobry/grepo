@@ -1,0 +1,23 @@
+#wrapper { position: relative; }
+
+#grepo, #header {
+    border-radius: 10px;
+    width: 80%;
+    margin: 0 auto;
+}
+#grepo { height: 30em; }
+#header { background-color: black;
+          color: #AAA;
+          font-size: 12px;
+          margin-bottom: 1em;
+          padding: 10px;
+}
+
+#up, #down { position: absolute;
+             right: 10%;
+             color: #AAA;
+             font-size: 12px;
+             cursor: pointer;
+}
+#up { top: 1em; }
+#down { bottom: 1em; }

@@ -48,7 +48,8 @@ def search(request):
 
     language = request.GET["language"].title()
     keywords = request.GET.getlist("keywords")
-    limit = request.GET.get("limit", 20)
+
+    limit = request.GET.get("only", 20)
 
     repositories = Repository.objects.filter(
         languages__name__iexact=language,

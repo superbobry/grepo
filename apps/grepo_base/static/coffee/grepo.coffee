@@ -1,16 +1,5 @@
 grepo = window.grepo ||= {}
 
-grepo.greetings =
-  [ " ___ ___ ___ ___ ___ "
-  , "| . |  _| -_| . | . |"
-  , "|_  |_| |___|  _|___|"
-  , "|___|       |_|      "
-  , "                     "
-  , "Search for projects in your favourite language which need *your* help!"
-  , "                     "
-  ].join "\n"
-
-
 grepo.match = (language) ->
   if language is ""
     grepo.LANGUAGES[0]
@@ -72,9 +61,15 @@ grepo.dispatch = (command, term) ->
 
 
 $ ->
-  $("body").terminal grepo.dispatch,
-    greetings: grepo.greetings
+  grepo.el = $("#grepo").terminal grepo.dispatch,
+    greetings: no
     prompt: "$"
     name: "grepo"
     exit: false
     keydown: grepo.complete
+
+  $("#down").click -> grepo.el.scroll(  12 * 5 )
+  $("#up").click   -> grepo.el.scroll(-(12 * 5))
+
+
+
