@@ -8,12 +8,16 @@ import textwrap
 from annoying.decorators import ajax_request
 from django.http import HttpResponseBadRequest
 from django.views.decorators.http import require_GET
-from django.shortcuts import get_object_or_404
 
 from .models import Repository
 
 
 def render(data):
+    """Renders a given repository tuple into an ASCII-dialog; tuple
+    items are as follows: repository name and url, main programing
+    language for this repository, calculated Grepo-score and
+    *hopefuly* short project summary.
+    """
     data = list(data)
 
     summary = textwrap.wrap(data.pop(), width=72)
@@ -33,6 +37,9 @@ def render(data):
 @require_GET
 @ajax_request
 def search(request):
+    """Fetches up to a `limit` repositories for a given `language`
+    and returns them ASCII-rendered.
+    """
     if not request.GET.get("language"):
         return HttpResponseBadRequest()
 

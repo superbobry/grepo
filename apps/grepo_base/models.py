@@ -8,7 +8,6 @@
 
 from datetime import datetime
 
-from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
