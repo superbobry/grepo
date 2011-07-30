@@ -2,3 +2,5 @@ Django==1.3
 South==0.7.3
 django-celery==2.2.4
 opster==2.2
+launchpadlib==1.6.0
+bzrlib==2.3.4
