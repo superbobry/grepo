@@ -54,12 +54,14 @@ class GithubBackend(object):
                     # by the caller.
 
                     created = parse_gh_datetime(repository["created_at"])
+
                     # If there is no "updated_at" field in api output,
                     # then repository wasn't ever updated and `updated_at`
                     # equals to `created_at`
                     updated = repository.get("updated_at",
                                              repository["created_at"])
                     updated = parse_gh_datetime(updated)
+
                     out = {
                         "url": repository["url"],
                         "name": repository["name"],
