@@ -7,13 +7,13 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
+
         # Adding field 'Repository.language'
-        db.add_column('grepo_base_repository', 'language', self.gf('django.db.models.fields.SmallIntegerField')(default='python'), keep_default=False)
+        db.add_column('grepo_base_repository', 'language', self.gf('django.db.models.fields.SmallIntegerField')(default=0), keep_default=False)
 
 
     def backwards(self, orm):
-        
+
         # Deleting field 'Repository.language'
         db.delete_column('grepo_base_repository', 'language')
 

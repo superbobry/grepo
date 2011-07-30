@@ -6,7 +6,9 @@ import re
 import textwrap
 
 from annoying.decorators import ajax_request
+from django.conf import settings
 from django.http import HttpResponseBadRequest
+from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_GET
 
 from .models import Repository
@@ -34,6 +36,7 @@ def render(data):
         "+"         + "-" * 94                                  + "+",
     ]).format(*data)
 
+
 @require_GET
 @ajax_request
 def search(request):
@@ -54,3 +57,7 @@ def search(request):
         "name", "url", "languages__name", "score", "summary")[:limit]
 
     return {"repositories": map(render, repositories)}
+
+
+if not settings.DEBUG:
+    search = cache_page(60 * 15)(search)  # 15 mins should be enough.

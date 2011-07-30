@@ -12,3 +12,7 @@ else:
         from .local import *
     except ImportError:
         pass
+
+
+import djcelery
+djcelery.setup_loader()
