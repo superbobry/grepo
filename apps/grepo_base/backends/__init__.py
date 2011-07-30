@@ -3,18 +3,9 @@
     grepo_base.backends
     ~~~~~~~~~~~~~~~~~~~
 
-    Each backend is expected to define **at least** the following
-    functions:
-
-    .. function:: list()
-
-       Returns an iterable, yielding repository data dicts, suitable for
-       passing to :class:`~grepo_base.models.Repository` constructor.
-
-    .. function:: update(repository)
-
-       Updates a given :class:`~grepo_base.models.Repository` object,
-       **without** saving it to the database.
+    Each backend is expected to define **at least** the ``__iter__``
+    function, yielding repository data dicts, suitable for passing
+    directly to :class:`~grepo_base.models.Repository` constructor.
 """
 
 from inspect import isgenerator
@@ -33,12 +24,15 @@ def load_backend(path):
     except (ImportError, AttributeError) as e:
         raise ImproperlyConfigured("Error importing Grepo backend {0}: {1}"
                                    .format(path, e))
+
     backend = Backend()
     if not hasattr(backend, "__iter__"):
         raise ImproperlyConfigured(
-                "Grepo backend {0} disabled.".format(path)
+            "Grepo backend {0} is missing '__iter__' method."
+            .format(backend.__name__)
         )
-    return backend
+    else:
+        return backend
 
 load_backend = memoize(load_backend, {}, 1)
 
