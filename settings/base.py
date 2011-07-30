@@ -2,7 +2,6 @@
 
 import sys
 
-import djcelery
 from unipath import FSPath as Path
 
 PROJECT_ROOT = Path(__file__).absolute().ancestor(2)
@@ -22,17 +21,6 @@ LANGUAGE_CODE = "en-us"
 SITE_ID = 1
 USE_I18N = True
 USE_L10N = True
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": PROJECT_ROOT.child("dev.db"),
-        "USER": "",
-        "PASSWORD": "",
-        "HOST": "",
-        "PORT": "",
-    }
-}
 
 STATIC_ROOT = PROJECT_ROOT.child("static")
 STATIC_URL = "/static/"
@@ -127,8 +115,6 @@ BROKER_BACKEND = "redis"
 CELERY_SEND_EVENTS = True
 CELERY_RESULT_BACKEND = "redis"
 CELERY_TASK_RESULT_EXPIRES = 20
-
-djcelery.setup_loader()
 
 
 # -- grepo_base

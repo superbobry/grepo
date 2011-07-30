@@ -2,15 +2,15 @@
 
 from bundle_config import config
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql_psycopg2",
-#         "NAME": config["postgres"]["database"],
-#         "USER": config["postgres"]["username"],
-#         "PASSWORD": config["postgres"]["password"],
-#         "HOST": config["postgres"]["host"],
-#     }
-# }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": config["postgres"]["database"],
+        "USER": config["postgres"]["username"],
+        "PASSWORD": config["postgres"]["password"],
+        "HOST": config["postgres"]["host"],
+    }
+}
 
 CACHES = {
     "default": {
@@ -29,4 +29,10 @@ CACHES = {
 REDIS_CONNECT_RETRY = True
 REDIS_HOST = config["redis"]["host"]
 REDIS_PORT = config["redis"]["port"]
+REDIS_PASSWORD = config["redis"]["password"]
 REDIS_DB = 0
+
+BROKER_HOST = REDIS_HOST
+BROKER_PORT = REDIS_PORT
+BROKER_PASSWORD = REDIS_PASSWORD
+BROKER_VHOST = REDIS_DB
