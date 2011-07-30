@@ -29,9 +29,6 @@ class LaunchpadBackend(object):
         self.launchpad = Launchpad.login_anonymously('grepo', 'production')
     
     def __iter__(self):
-        return self
-    
-    def next(self):
         for project in self.launchpad.projects[:100]:
             # We only add projects with recognizable
             # programming languages
