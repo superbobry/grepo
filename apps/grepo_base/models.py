@@ -9,6 +9,7 @@
 
 from datetime import datetime
 
+from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext as _
 
@@ -18,6 +19,9 @@ from django.utils.translation import ugettext as _
 SOURCES = [(0, "github.com"),
            (1, "launchpad.net")]
 
+#: Supported languages.
+LANGUAGES = list(enumerate(settings.GREPO_LANGUAGES))
+
 
 class Repository(models.Model):
     url = models.CharField(_("url"), max_length=255)
@@ -26,6 +30,7 @@ class Repository(models.Model):
         help_text=_("`grepo` score for this repository, the bigger the "
                     "value -- the more help is needed."))
     source = models.SmallIntegerField(_("source"), choices=SOURCES)
+    language = models.SmallIntegerField(_("language"), choices=LANGUAGES)
     summary = models.TextField(_("summary"), blank=True, null=True,
         help_text=_("project summary, to help the users find what they"
                      "want."))

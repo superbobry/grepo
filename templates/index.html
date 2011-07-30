@@ -7,6 +7,11 @@
   <script src="{{ STATIC_URL }}js/jquery.terminal-0.3.4.min.js"></script>
   <script src="{{ STATIC_URL }}js/coffee-script.js"></script>
   <script src="{{ STATIC_URL }}coffee/grepo.coffee" type="text/coffeescript"></script>
+  <script>
+    window.grepo = {};
+    window.grepo.LANGUAGES = "{{ GREPO_LANGUAGES|join:", " }}".split(", ");
+  </script>
+
 {% endblock %}
 
 {% block title %}grepo{% endblock %}

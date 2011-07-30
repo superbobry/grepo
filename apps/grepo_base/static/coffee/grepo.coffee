@@ -1,4 +1,4 @@
-grepo = window.grepo = {}
+grepo = window.grepo ||= {}
 
 grepo.greetings =
   [ " ___ ___ ___ ___ ___ "
@@ -26,9 +26,28 @@ grepo.parse = (command) ->
     # show help message.
 
 
+grepo.match = (language) ->
+  if language is ""
+    grepo.LANGUAGES[0]
+  else
+    regex = new RegExp("^#{language}")
+    for candidate in grepo.LANGUAGES
+      return candidate if regex.test candidate
+
+    language
+
+
 grepo.complete = (event, term) ->
   if event.keyCode is 9   # Try to auto-complete on TAB.
-    command = term.get_command();
+    options = grepo.parse term.get_command()
+
+    if options? and options.language?
+      # a) auto-complete language
+      if not options.keywords.length
+        term.set_command "grepo -l #{grepo.match options.language} "
+      else
+        # query the server for the closest matching tag.
+
     return no
 
 
