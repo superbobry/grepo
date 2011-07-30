@@ -48,7 +48,7 @@ class LaunchpadBackend(object):
             'name': name,
             'created_at': project.date_created,
             'summary': project.summary,
-            'score': self.calculate_score(),
+            'score': self.calculate_score(project),
             'source': 1,
             'languages': language_list,
         }
@@ -103,6 +103,6 @@ class LaunchpadBackend(object):
             if language:
                 language_list.append(language)
         
-        language_list = [Language.objects.get(name=l) for lang in set(language_list)]
+        language_list = [Language.objects.get(name=lang) for lang in set(language_list)]
         return language_list
     
