@@ -15,11 +15,6 @@
 
        Updates a given :class:`~grepo_base.models.Repository` object,
        **without** saving it to the database.
-
-    .. function:: needs_update(repository)
-
-       Returns ``True`` if a given :class:`~grepo_base.models.Repository`
-       instance needs to be updated and ``False`` otherwise.
 """
 
 from django.conf import settings

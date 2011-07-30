@@ -55,7 +55,7 @@ def get_repos():
         yield get_project_info(project.name, language_list)
 
 def get_project_info(name, language_list):
-    project = launchpad.projects[name]    
+    project = launchpad.projects[name]
     info = {}
     info['name'] = name
     info['created_at'] = project.date_created
@@ -102,7 +102,7 @@ def get_project_languages(language_string):
         languages = language_string.split(r'/')
     if len(languages) == 1:
         languages = language_string.split(r' ')
-        
+
     language_list = []
     for l in languages:
         language = guess_language(l)
@@ -110,4 +110,3 @@ def get_project_languages(language_string):
             language_list.append(language)
 
     return set(language_list)
-

@@ -64,8 +64,3 @@ class Repository(models.Model):
     def save(self):
         self.updated_at = datetime.now()
         super(Repository, self).save()
-
-
-def calculate_grepo_score():
-    """Returns `grepo` score for a bunch of repository metadata."""
-    return 0
