@@ -38,7 +38,7 @@ class Repository(models.Model):
     updated_at = models.DateTimeField(_("updated"))
 
     def save(self):
-        self.update_at = datetime.now()
+        self.updated_at = datetime.now()
         super(Repository, self).save()
 
 
