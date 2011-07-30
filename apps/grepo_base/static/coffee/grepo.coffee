@@ -71,10 +71,10 @@ grepo.dispatch = (command, term) ->
           term.echo xhr.repositories.join("\n\n")
 
 
-
 $ ->
   $("body").terminal grepo.dispatch,
     greetings: grepo.greetings
     prompt: "$"
+    name: "grepo"
     exit: false
     keydown: grepo.complete
