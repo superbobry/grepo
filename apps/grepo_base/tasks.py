@@ -20,10 +20,13 @@ def update_backend(backend):
     for data in backend:
         languages = [all_languages[l] for l in data.pop("languages")]
 
-        r, created = Repository.objects.get_or_create(url=data["url"])
+        try:
+            r = Repository.objects.get(url=data["url"])
+        except Repository.DoesNotExist:
+            r = Repository()
         [setattr(r, k, data[k]) for k in data]
-        r.save()
         r.languages.add(*languages)
+        r.save()
 
         if hasattr(backend, "delay"):
             time.sleep(backend.delay)
@@ -33,4 +36,4 @@ def update_backend(backend):
 def update_world():
     """Update **all** repositories for **all** backends."""
     for backend in get_backends():
-        update_backend.apply_async([backend])
+        update_backend.apply_async(args=(backend,))
