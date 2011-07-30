@@ -29,19 +29,19 @@ class LaunchpadBackend(object):
         self.launchpad = Launchpad.login_anonymously('grepo', 'production')
     
     def __iter__(self):
-        for project in self.launchpad.projects[:100]:
+        for project in self.launchpad.projects:
             # We only add projects with recognizable
             # programming languages
             if not hasattr(project, 'programming_language'):
                 continue
             if not project.programming_language:
                 continue
-            language_list = get_project_languages(project.programming_language)
+            language_list = self.get_project_languages(project.programming_language)
             if not language_list:
                 continue
-            yield get_project_info(project.name, language_list)
+            yield self.get_project_info(project.name, language_list)
     
-    def get_project_info(name, language_list):
+    def get_project_info(self, name, language_list):
         project = self.launchpad.projects[name]
         return {
             'url': LAUNCHPAD_URL + name,
@@ -53,11 +53,11 @@ class LaunchpadBackend(object):
             'languages': language_list,
         }
     
-    def calculate_score(project):
+    def calculate_score(self, project):
         '''Calculate Grepo-score'''
         return 0
     
-    def get_last_updated(project):
+    def get_last_updated(self, project):
         '''Date of the last commit to project branches'''
         updated_at = None
         for branch in project.getBranches():
@@ -67,7 +67,7 @@ class LaunchpadBackend(object):
                 updated_at = branch.date_last_modified
         return updated_at
     
-    def get_issues_number(project, states=STATES):
+    def get_issues_number(self, project, states=STATES):
         '''Count all active tasks for the project
         
         This is going to affect Grepo-score supposedly.
@@ -75,12 +75,11 @@ class LaunchpadBackend(object):
         num = sum(1 for task in project.searchTasks(status=states))
         return num
     
-    def guess_language(language):
+    def guess_language(self, language):
         '''Try to guess a proper language name based on user input'''
         language = language.strip().title()
         if language in LANGUAGES:
             return language
-        # Try non-exact match, doesn't work for C :(
         for lang in LANGUAGES:
             if lang == 'c':
                 continue
@@ -88,7 +87,7 @@ class LaunchpadBackend(object):
                 return lang
         return None
     
-    def get_project_languages(language_string):
+    def get_project_languages(self, language_string):
         '''Try to get the list of programming languages for the project'''
         languages = language_string.split(r',')
         if len(languages) == 1:
@@ -100,7 +99,7 @@ class LaunchpadBackend(object):
     
         language_list = []
         for lang in languages:
-            language = guess_language(lang)
+            language = self.guess_language(lang)
             if language:
                 language_list.append(language)
         
