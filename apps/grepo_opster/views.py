@@ -7,6 +7,7 @@ import opster
 from annoying.decorators import ajax_request
 from django.conf import settings
 from django.http import HttpResponseBadRequest
+from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET
 
@@ -23,11 +24,15 @@ def stub(*args, **kwargs):
     simply not usable.
     """
     language = kwargs["language"]
+    if not language:
+        raise opster.Abort(
+            _("sorry, can't grepo anything without a language :(")
+        )
     if language not in settings.GREPO_LANGUAGES:
         raise opster.Abort(
-            "sorry, grepo doesn't speak {0!r}, how about: {1!r}?"
-            .format(language, random.choice(settings.GREPO_LANGUAGES)))
-
+            _("sorry, grepo doesn't speak {0!r}, how about: {1!r}?"
+             .format(language, random.choice(settings.GREPO_LANGUAGES)))
+        )
 
 @require_GET
 @csrf_exempt
