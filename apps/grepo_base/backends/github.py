@@ -6,11 +6,10 @@
     Github.com backend for `grepo`.
 """
 
-import math
 import itertools
 
 from httplib import HTTPConnection
-from datetime import datetime
+from dateutil import parser
 
 from django.utils import simplejson as json
 
@@ -21,6 +20,9 @@ from grepo_base.models import Language
 SEARCH_PATH = "/api/v2/json/repos/search/language:{lang}?start_page={page}"
 #: Github host, used for httplib for connect to api
 GITHUB = "github.com"
+
+
+parse_gh_datetime = parser.parse
 
 
 def fetch(language, page):
@@ -48,39 +50,23 @@ def list():
                 # Note: `source` and `language` field should be handled
                 # by the caller.
 
+                created = parse_gh_datetime(repository["created_at"])
                 # If there is no "updated_at" field in api output,
                 # then repository wasn't ever updated and `updated_at`
                 # equals to `created_at`
                 updated = repository.get("updated_at",
                                          repository["created_at"])
-                yield {
+                updated = parse_gh_datetime(updated)
+                out = {
                     "url": repository["url"],
                     "name": repository["name"],
                     "language": repository["language"],
-                    "summary": repository["description"],
-                    "score": calculate_repository_score(repository),
+                    "summary": repository.get("description", ""),
                     "updated_at": updated,
-                    "created_at": repository["created_at"]
+                    "created_at": created,
+                    "open_issues": repository["open_issues"],
+                    "watchers": repository["watchers"],
+                    "forks": repository["forks"],
+                    "score": repository["score"]
                 }
-
-
-def update(repository):
-    return repository  # A simple pass-through for now.
-
-
-def calculate_repository_score(data):
-    """Calculates and returns Grepo-score for a given repository.
-
-    .. todo:: query for pull requests and add them to the exponent
-              argument.
-    """
-    parse = lambda d: datetime.strptime(d, "%Y/%m/%dT %H:%M:%S %z")
-
-    data.update(
-        created_at=parse(data["created_at"]),
-        pushed_at=parse(data["pushed_at"])
-    )
-
-    return (data["created_at"] - data["pushed_at"]).days * math.exp(
-        1 / (data["open_issues"] + data["watchers"] / data["forks"])
-    )
+                yield out
