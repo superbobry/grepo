@@ -4,17 +4,22 @@
     ~~~~~~~~~~~~~~~~~
 
 """
+from datetime import datetime
 
 from json import loads
 from itertools import count
 from httplib import HTTPConnection
+
+from django.conf import settings
+
+from grepo_base.models import Repository
 
 #: Github api search path
 SEARCH_PATH = "/api/v2/json/repos/search/language:{lang}?start_page={page}"
 #: Github host, used for httplib for connect to api
 GITHUB = "github.com"
 #: List of languages that we will be processed
-LANGUAGES = ["Io"]
+LANGUAGES = [lang[0].upper() + lang[1:] for lang in settings.GREPO_LANGUAGES]
 
 
 def get_page(lang, page):
@@ -40,6 +45,15 @@ def fetch_repositories():
             yield repository
 
 
+def save_repository(repository):
+    obj = Repository(url=repository["url"], name=repository["name"],
+                     source=0,
+                     language=LANGUAGES.index(repository["language"]),
+                     summary=repository.get("description"),
+                     updated_at=datetime.utcnow(), created_at=datetime.utcnow())
+    obj.save()
+
+
 def rescan_github():
     for repository in fetch_repositories():
-        print repository
+        save_repository(repository)
