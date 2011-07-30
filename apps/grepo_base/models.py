@@ -31,13 +31,13 @@ class Language(models.Model):
     def __unicode__(self):
         return self.name
 
-    def save(self):
+    def save(self, *args, **kwargs):
         self.name = self.name.title()
 
         if not self.slug:
             self.slug = slugify(self.name)
 
-        super(Language, self).save()
+        super(Language, self).save(*args, **kwargs)
 
 
 class Repository(models.Model):
@@ -61,6 +61,6 @@ class Repository(models.Model):
     def __unicode__(self):
         return self.url
 
-    def save(self):
+    def save(self, *args, **kwargs):
         self.updated_at = datetime.now()
-        super(Repository, self).save()
+        super(Repository, self).save(*args, **kwargs)
