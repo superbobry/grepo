@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import string
 from launchpadlib.launchpad import Launchpad
 from django.conf import settings
 from grepo_base.models import Repository, Language
@@ -20,9 +19,8 @@ STATES = (
 
 LANGUAGES = Language.objects.all().values_list('name', flat=True)
 
-launchpad = Launchpad.login_anonymously('grepo', 'production')
-
-def get_repos():
+def initiate_repositories_update():
+    launchpad = Launchpad.login_anonymously('grepo', 'production')
     for project in launchpad.projects[:100]:
         # We only add projects with recognizable
         # programming languages
@@ -35,18 +33,20 @@ def get_repos():
             continue
         yield get_project_info(project.name, language_list)
 
-def get_project_info(name, language_list):
+def update_project_info(name, language_list):
+    '''Create or update repository info '''
     project = launchpad.projects[name]
-    info = {}
-    info['name'] = name
-    info['created_at'] = project.date_created
-    info['summary'] = project.summary
-    info['url'] = LAUNCHPAD_URL + name
-    info['score'] = 0
-    info['source'] = 1
-    repo = Repository.objects.create(**info)
+    repo = Repository.objects.get_or_create(url=LAUNCHPAD_URL + name)
+    repo.name = name
+    repo.created_at=project.date_created
+    repo.summary = project.summary
+    repo.score = calculate_score()
+    repo.source = 1
     repo.languages = language_list
     repo.save()
+
+def calculate_score(project):
+    return 0
 
 def get_last_updated(project):
     '''Date of the last commit to project branches'''
@@ -72,11 +72,11 @@ def guess_language(language):
     if language in LANGUAGES:
         return language
     # Try non-exact match, doesn't work for C :(
-    for l in LANGUAGES:
-        if l == 'c':
+    for lang in LANGUAGES:
+        if lang == 'c':
             continue
-        if l in language:
-            return l
+        if lang in language:
+            return lang
     return None
 
 def get_project_languages(language_string):
@@ -91,10 +91,10 @@ def get_project_languages(language_string):
         languages = language_string.split(r' ')
 
     language_list = []
-    for l in languages:
-        language = guess_language(l)
+    for lang in languages:
+        language = guess_language(lang)
         if language:
             language_list.append(language)
     
-    language_list = [Language.objects.get(name=l) for l in set(language_list)]
+    language_list = [Language.objects.get(name=l) for lang in set(language_list)]
     return language_list
