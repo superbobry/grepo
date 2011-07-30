@@ -66,7 +66,6 @@ class GithubBackend(object):
                         "url": repository["url"],
                         "name": repository["name"],
                         "languages": [repository["language"]],
-                        "source": 0,
                         "score": repository["score"],
                         "summary": repository.get("description", ""),
                         "updated_at": updated,
