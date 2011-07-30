@@ -3,6 +3,8 @@
 import sys
 import os
 
+import djcelery
+
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(PROJECT_ROOT, "apps"))
 
@@ -89,6 +91,7 @@ INSTALLED_APPS = (
     "django.contrib.admin",
 
     "south",
+    "djcelery",
 
     "grepo_base",
 )
@@ -111,10 +114,11 @@ LOGGING = {
     }
 }
 
-
 # -- grepo_base
 GREPO_LANGUAGES = [
     "python",
     "io",
 ]
 GREPO_BACKENDS = []
+
+djcelery.setup_loader()
