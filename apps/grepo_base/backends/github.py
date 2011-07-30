@@ -80,6 +80,5 @@ def calculate_repository_score(data):
         pushed_at=parse(data["pushed_at"])
     )
 
-    return (data["created_at"] - data["pushed_at"]).days * math.exp(
-        1 / (data["open_issues"] + data["watchers"] / data["forks"])
-    )
+    return (data["created_at"] - data["pushed_at"]).days * \
+        data["open_issues"] / math.log10(data["watchers"] + data["forks"])
