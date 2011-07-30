@@ -40,7 +40,7 @@ grepo.complete = (event, term) ->
 
     # complete an argument.
     switch key
-      when "-n"
+      when "-o"
         value = parseInt(value or "10", 10) * 2
       when "-l"
         value = grepo.match(value)
