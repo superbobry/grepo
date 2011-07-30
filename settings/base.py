@@ -108,8 +108,6 @@ LOGGING = {
 
 CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 
-BROKER_USER = ""
-BROKER_PASSWORD = ""
 BROKER_BACKEND = "redis"
 
 CELERY_SEND_EVENTS = True
