@@ -11,21 +11,6 @@ grepo.greetings =
   ].join "\n"
 
 
-grepo.parse = (command) ->
-  help = ->
-
-  return unless /^grepo\s/.test command
-
-  [_, args...] = command.split /\s+/
-
-  # extract the language value (oh `getopt` where art thou?) and treat
-  # the rest of positional arguments as keywords.
-  if args[0] is "-l" or args[0] is "--language"
-    language: args[1], keywords: args[2...]
-  else
-    # show help message.
-
-
 grepo.match = (language) ->
   if language is ""
     grepo.LANGUAGES[0]
@@ -52,10 +37,14 @@ grepo.complete = (event, term) ->
 
 
 grepo.dispatch = (command, term) ->
-  options = grepo.parse command
+  [name, argv...] = command.split(/\s+/)
 
-  if not options?
-    term.echo [ "Usage: grepo -l LANGUAGE [KEYWORDS]" ].join "\n"
+  if name isnt "grepo"
+    term.error "command not found: #{name}"
+  else
+    $.getJSON "/opster/", argv: argv, (xhr) ->
+      term.error(xhr.stderr) if xhr.stderr
+      term.echo (xhr.stdout) if xhr.stdout
 
 
 $ ->

@@ -9,5 +9,6 @@ admin.autodiscover()
 
 urlpatterns = patterns("",
     url(r"^$", direct_to_template, {"template": "index.html"}),
+    url(r"^opster/$", include("grepo_opster.urls")),
     url(r"^admin/", include(admin.site.urls)),
 ) + staticfiles_urlpatterns()

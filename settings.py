@@ -91,6 +91,7 @@ INSTALLED_APPS = (
     "south",
 
     "grepo_base",
+    "grepo_opster",
 )
 
 LOGGING = {
@@ -118,3 +119,13 @@ GREPO_LANGUAGES = [
     "io",
 ]
 GREPO_BACKENDS = []
+
+
+# -- grepo_opster
+GREPO_NAME = "grepo"
+GREPO_USAGE = "%name -L LANGUAGE [-n] RESULTS [KEYWORDS]"
+GREPO_OPTIONS = [
+    ("L", "language", "brainfuck",
+      "programming language you want to grepo for"),
+    ("n", "results", 20, "maximum number of projects to look up"),
+]
