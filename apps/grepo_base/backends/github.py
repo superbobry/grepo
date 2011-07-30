@@ -29,12 +29,24 @@ class GithubBackend(object):
 
     def __init__(self):
         self.response = None
+        self.delayed = False
 
     def fetch(self, language, page):
         connection = HTTPConnection(GITHUB)
         connection.request("GET", SEARCH_PATH.format(lang=language, page=page))
         self.response = connection.getresponse()
         self.data = self.response.read()
+        self.delayed = False
+
+    @property
+    def delay(self):
+        if self.delayed:
+            return 0
+        self.delayed = True
+        remain = int(self.response.getheader("x-ratelimit-remaining"))
+        if remain < 4:
+            return 4 - remain
+        return 0
 
     def __iter__(self):
         """Yields all repositories one by one."""
