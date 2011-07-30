@@ -122,10 +122,6 @@ djcelery.setup_loader()
 
 # -- grepo_base
 
-GREPO_LANGUAGES = [
-    "io",
-    "erlang"
-]
 GREPO_BACKENDS = [
     "grepo_base.backends.github",
     "grepo_base.backends.lp",

@@ -6,11 +6,13 @@ from cStringIO import StringIO
 import opster
 from annoying.decorators import ajax_request
 from django.conf import settings
+from django.db.models import Q
 from django.http import HttpResponseBadRequest
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET
 
+from grepo_base.models import Language
 
 # Monkey patching `opster` to use **our** sysname, not just `manage.py`.
 opster.sysname = lambda *args: settings.GREPO_NAME
@@ -28,10 +30,18 @@ def stub(*args, **kwargs):
         raise opster.Abort(
             _("sorry, can't grepo anything without a language :(")
         )
-    if language not in settings.GREPO_LANGUAGES:
+    if not Language.objects\
+        .filter(Q(slug=language) | Q(name=language)).exists():
+        total = Language.objects.count()
+
+        if total is 1:
+            hint = Language.objects.get()
+        else:
+            hint = Language.objects.get(pk=random.randrange(1, total))
+
         raise opster.Abort(
-            _("sorry, grepo doesn't speak {0!r}, how about: {1!r}?"
-             .format(language, random.choice(settings.GREPO_LANGUAGES)))
+            _("sorry, grepo doesn't speak {0!r}, how about: {1}?")
+             .format(language, hint)
         )
 
 @require_GET
