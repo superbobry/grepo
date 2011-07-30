@@ -4,17 +4,6 @@ from unipath import FSPath as Path
 
 PROJECT_ROOT = Path(__file__).absolute().ancestor(2)
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": PROJECT_ROOT.child("dev.db"),
-        "USER": "",
-        "PASSWORD": "",
-        "HOST": "",
-        "PORT": "",
-    }
-}
-
 # -- django-celery
 
 REDIS_CONNECT_RETRY = True

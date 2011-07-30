@@ -23,6 +23,17 @@ SITE_ID = 1
 USE_I18N = True
 USE_L10N = True
 
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": PROJECT_ROOT.child("dev.db"),
+        "USER": "",
+        "PASSWORD": "",
+        "HOST": "",
+        "PORT": "",
+    }
+}
+
 STATIC_ROOT = PROJECT_ROOT.child("static")
 STATIC_URL = "/static/"
 STATICFILES_DIRS = (

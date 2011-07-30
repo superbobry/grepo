@@ -5,3 +5,4 @@ opster==2.2
 redis==2.4.9
 launchpadlib>=1.9.7
 Unipath>=0.2
+django-redis-cache==0.8.2
