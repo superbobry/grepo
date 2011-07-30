@@ -60,7 +60,7 @@ def get_last_updated(project):
 
 def get_issues_number(project, states=STATES):
     '''Count all active tasks for the project
-    
+
     This is going to affect grepo-score supposedly.
     '''
     num = sum(1 for task in project.searchTasks(status=states))
@@ -95,6 +95,6 @@ def get_project_languages(language_string):
         language = guess_language(lang)
         if language:
             language_list.append(language)
-    
+
     language_list = [Language.objects.get(name=l) for lang in set(language_list)]
     return language_list

@@ -38,7 +38,7 @@ def stub(*args, **kwargs):
             hint = Language.objects.get(pk=random.randrange(1, total))
 
         raise opster.Abort(
-            _("sorry, grepo doesn't speak {0!r}, how about: {1}?")
+            _("sorry, grepo doesn't speak {0}, how about: {1}?")
              .format(language, hint)
         )
 
