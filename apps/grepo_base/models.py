@@ -26,6 +26,9 @@ class Repository(models.Model):
         help_text=_("`grepo` score for this repository, the bigger the "
                     "value -- the more help is needed."))
     source = models.SmallIntegerField(_("source"), choices=SOURCES)
+    summary = models.TextField(_("summary"), blank=True, null=True,
+        help_text=_("project summary, to help the users find what they"
+                     "want."))
     created_at = models.DateTimeField(_("created"))
     updated_at = models.DateTimeField(_("updated"))
 
