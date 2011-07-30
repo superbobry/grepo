@@ -56,7 +56,7 @@ grepo.dispatch = (command, term) ->
   [name, argv...] = command.split(/\s+/)
 
   if name isnt "grepo"
-    term.error "command not found: #{name}"
+    term.error "command not found: #{name}" if name
   else
     $.getJSON "/opster/", argv: argv, (xhr) ->
       return term.error(xhr.stderr) if xhr.stderr
