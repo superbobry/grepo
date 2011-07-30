@@ -5,6 +5,9 @@ import os
 
 import djcelery
 
+rel = lambda *chunks: os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                  *chunks)
+
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(PROJECT_ROOT, "apps"))
 
@@ -20,7 +23,7 @@ MANAGERS = ADMINS
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "dev.db",
+        "NAME": rel("dev.db"),
         "USER": "",
         "PASSWORD": "",
         "HOST": "",
@@ -137,8 +140,8 @@ djcelery.setup_loader()
 
 # -- grepo_base
 GREPO_LANGUAGES = [
-    "python",
     "io",
+    "erlang"
 ]
 GREPO_BACKENDS = []
 
