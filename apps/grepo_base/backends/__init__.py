@@ -34,7 +34,7 @@ def load_backend(path):
         raise ImproperlyConfigured("Error importing Grepo backend {0}: {1}"
                                    .format(path, e))
     backend = Backend()
-    if not isgenerator(backend):
+    if not hasattr(backend, "__iter__"):
         raise ImproperlyConfigured(
                 "Grepo backend {0} disabled.".format(path)
         )
