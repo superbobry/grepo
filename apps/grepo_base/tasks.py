@@ -19,14 +19,15 @@ def update_backend(backend):
 
     for data in backend:
         languages = [all_languages[l] for l in data.pop("languages")]
-
         try:
             r = Repository.objects.get(url=data["url"])
         except Repository.DoesNotExist:
             r = Repository()
         [setattr(r, k, data[k]) for k in data]
-        r.languages.add(*languages)
+
         r.save()
+
+        r.languages.add(*languages)
 
         if hasattr(backend, "delay"):
             time.sleep(backend.delay)
