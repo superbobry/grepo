@@ -1,9 +1,6 @@
-{% extends "base.html" %}
+{% extends "grepo.html" %}
 
-{% block extrahead %}
-  <link rel="stylesheet" media="screen" href="{{ STATIC_URL }}css/jquery.terminal.css" />
-  <link rel="stylesheet" media="screen" href="{{ STATIC_URL }}css/style.css" />
-
+{% block js %}
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
   <script src="{{ STATIC_URL }}js/jquery.terminal-0.3.4.min.js"></script>
   <script src="{{ STATIC_URL }}js/jquery.mousewheel.js"></script>
@@ -13,20 +10,9 @@
     window.grepo = {};
     window.grepo.LANGUAGES = "{{ GREPO_LANGUAGES|join:", " }}".split(", ");
   </script>
-
 {% endblock %}
 
-{% block title %}grepo{% endblock %}
-
 {% block content %}
-  <pre id="header">
-     ___ ___ ___ ___ ___
-    | . |  _| -_| . | . |
-    |_  |_| |___|  _|___|
-    |___|       |_|
-
-    Search for projects in your favourite language which need *your* help!
-  </pre>
   <div id="wrapper">
     <div id="grepo"></div>
     <div id="up">▲</div>

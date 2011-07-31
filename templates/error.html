@@ -1,0 +1,12 @@
+{% extends "grepo.html" %}
+
+{% block content %}
+    <div id="wrapper">
+        <div id="error" class="terminal">
+            <span class="prompt">$</span>
+            {% block error %}{% endblock %}
+        </div>
+        <div id="up">▲</div>
+        <div id="down">▼</div>
+    </div>
+{% endblock %}

@@ -1,11 +1,11 @@
 #wrapper { position: relative; }
 
-#grepo, #header {
+#grepo, #error, #header {
     border-radius: 10px;
     width: 80%;
     margin: 0 auto;
 }
-#grepo { height: 30em; }
+#grepo, #error { height: 30em; }
 #header { background-color: black;
           color: #AAA;
           font-size: 12px;

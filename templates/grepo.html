@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block extrahead %}
+  <link rel="stylesheet" media="screen" href="{{ STATIC_URL }}css/jquery.terminal.css" />
+  <link rel="stylesheet" media="screen" href="{{ STATIC_URL }}css/style.css" />
+  {% block js %}{% endblock %}
+
+{% endblock %}
+
+{% block title %}grepo{% endblock %}
+
+{% block base_content %}
+  <pre id="header">
+     ___ ___ ___ ___ ___
+    | . |  _| -_| . | . |
+    |_  |_| |___|  _|___|
+    |___|       |_|
+
+    Search for projects in your favourite language which need *your* help!
+  </pre>
+  {% block content %}
+  {% endblock %}
+{% endblock %}
