@@ -6,8 +6,9 @@ import time
 from datetime import timedelta
 
 from celery.decorators import periodic_task, task
+from django.conf import settings
 
-from grepo_base.backends import get_backends
+from grepo_base.backends import load_backend
 from grepo_base.models import Language, Repository
 
 
@@ -15,6 +16,7 @@ from grepo_base.models import Language, Repository
 def update_backend(backend):
     # Pre-fetch all available languages, since they aren't likely to
     # change anyway.
+    backend = load_backend(backend)
     all_languages = dict([(l.name, l) for l in Language.objects.all()])
 
     for data in backend:
@@ -37,5 +39,5 @@ def update_backend(backend):
 @periodic_task(run_every=timedelta(days=1))
 def update_world():
     """Update **all** repositories for **all** backends."""
-    for backend in get_backends():
-        update_backend.apply_async(args=[backend])
+    for backend in settings.GREPO_BACKENDS:
+        update_backend.delay(backend)
