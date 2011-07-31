@@ -17,10 +17,10 @@ def update_backend(backend):
     # Pre-fetch all available languages, since they aren't likely to
     # change anyway.
     backend = load_backend(backend)
-    all_languages = dict([(l.name, l) for l in Language.objects.all()])
+    all_languages = dict([(lang.name, lang) for lang in Language.objects.all()])
 
     for data in backend:
-        languages = [all_languages[l] for l in data.pop("languages")]
+        languages = [all_languages[lang] for lang in data.pop("languages")]
         #try:
             #r = Repository.objects.get(url=data["url"])
         #except Repository.DoesNotExist:
