@@ -28,7 +28,7 @@ CACHES = {
 
 REDIS_CONNECT_RETRY = True
 REDIS_HOST = config["redis"]["host"]
-REDIS_PORT = config["redis"]["port"]
+REDIS_PORT = int(config["redis"]["port"])
 REDIS_PASSWORD = config["redis"]["password"]
 REDIS_DB = 0
 
