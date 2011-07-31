@@ -1,8 +1,6 @@
-{% extends "grepo.html" %}
+{% extends "base.html" %}
 
-{% block js %}
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
-  <script src="{{ STATIC_URL }}js/jquery.terminal-0.3.4.min.js"></script>
+{% block extrahead %}
   <script src="{{ STATIC_URL }}js/jquery.mousewheel.js"></script>
   <script src="{{ STATIC_URL }}js/coffee-script.js"></script>
   <script src="{{ STATIC_URL }}coffee/grepo.coffee" type="text/coffeescript"></script>
@@ -10,12 +8,4 @@
     window.grepo = {};
     window.grepo.LANGUAGES = "{{ GREPO_LANGUAGES|join:", " }}".split(", ");
   </script>
-{% endblock %}
-
-{% block content %}
-  <div id="wrapper">
-    <div id="grepo"></div>
-    <div id="up">▲</div>
-    <div id="down">▼</div>
-  </div>
 {% endblock %}

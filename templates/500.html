@@ -1,5 +1,47 @@
-{% extends "grepo.html" %}
+{% extends "base.html" %}
 
-{% block error %}
-    <span>Internal server error.</span>
+{% block title %}{{ block.super }} -- Ooops ©{% endblock %}
+
+{% block extrahead %}
+  <script>
+    $(function(){
+      var trace = [
+          "Unable to handle kernel NULL pointer dereference at virtual address 0000000c"
+        , "printing eip:"
+        , "f89e568a"
+        , "*pde = 32859001"
+        , "*pte = 00000000"
+        , "Oops: 0000"
+        , "Kernel 2.6.30-25"
+        , "CPU: 1"
+        , "EIP: 0010:[] Tainted: PF"
+        , "EFLAGS: 00010096"
+        , "EIP is at _dlgn_setevmask [streams-dlgnDriver] 0xe"
+        , "eax: 00000000 ebx: f65f5410 ecx: f5e16710 edx: f65f5410"
+        , "esi: 00001ea0 edi: f5e23c30 ebp: f65f5410 esp: f1cf7e78"
+        , "ds: 0018 es: 0018 ss: 0018"
+        , "Process pwcallmgr (pid: 10334, stackpage=f1cf7000)"
+        , "Stack: 00000000 c01067fa 00000086 f1cf7ec0 00001ea0 f5e23c30 f65f5410 f89e53ec"
+        , "f89fcd60 f5e16710 f65f5410 f65f5410 f8a54420 f1cf7ec0 f8a4d73a 0000139e"
+        , "f5e16710 f89fcd60 00000086 f5e16710 f5e16754 f65f5410 0000034a f894e648"
+        , "Call Trace: [setup_sigcontext+218/288] setup_sigcontext [kernel] 0xda"
+        , "Call Trace: [] setup_sigcontext [kernel] 0xda"
+        , "[] dlgnwput [streams-dlgnDriver] 0xe8"
+        , "[] Sm_Handle [streams-dlgnDriver] 0x1ea0"
+        , "[] intdrv_lock [streams-dlgnDriver] 0×0"
+        , "[] Gn_Maxpm [streams-dlgnDriver] 0x8ba"
+        , "[] Sm_Handle [streams-dlgnDriver] 0x1ea0"
+        , "[] lis_safe_putnext [streams] 0×168"
+        , "[] __insmod_streams-dvbmDriver_S.bss_L117376 [streams-dvbmDriver] 0xab8 []"
+      ].join("\n");
+
+      var ignore = function() { return false; };
+      $("#grepo").terminal(ignore, {
+          greetings: null
+        , prompt: "$"
+        , keydown: ignore
+        , keypress: ignore
+      }).echo(trace);
+    });
+  </script>
 {% endblock %}
