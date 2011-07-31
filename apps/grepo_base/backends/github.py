@@ -56,7 +56,7 @@ class GithubBackend(object):
 
         score = (datetime.utcnow() - updated.replace(tzinfo=None)).days * \
             math.exp(issues / (watchers + forks))
-        return (score % 365. / 365.)
+        return score % 365. / 365.
 
     def __iter__(self):
         """Yields all repositories one by one."""

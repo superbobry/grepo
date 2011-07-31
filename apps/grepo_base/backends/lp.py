@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-'''
+"""
     grepo_base.backends.lp
     ~~~~~~~~~~~~~~~~~
 
     Launchpad backend for `grepo`.
-'''
+"""
 
 import re
 import posixpath
@@ -38,15 +38,16 @@ class LaunchpadBackend(object):
                                                      settings.LP_DIR)
 
     def __iter__(self):
-        all_languages = set(Language.objects.all().values_list('name', flat=True))
+        all_languages = set(Language.objects.all().values_list('name',
+                                                               flat=True))
 
         for project in self.launchpad.projects:
-            
+
             # We are not interested in projects that do not host
             # their code on Launchpad
             if not project.getBranches()[:1]:
                 continue
-            
+
             # Since Launchpad allows almost *anything* in the
             # `programming language` field, we are forced to pick only
             # those repositories, which have a programming language we
@@ -62,10 +63,10 @@ class LaunchpadBackend(object):
             languages &= all_languages
 
             if not languages:
-                continue            
-            
+                continue
+
             updated_at = self.get_last_updated(project)
-            
+
             yield {
                 'url': posixpath.join('https://launchpad.net/', project.name),
                 'name': project.name,
@@ -77,15 +78,15 @@ class LaunchpadBackend(object):
             }
 
     def calculate_score(self, project, updated_at):
-        '''Calculate Grepo-score for a given project.'''
+        """Calculate Grepo-score for a given project."""
         issues = self.get_issues_number(project) or 1
 
         score = (datetime.utcnow() - updated_at.replace(tzinfo=None)).days * \
             math.exp(issues)
-        return (score % 365. / 365.)
+        return score % 365. / 365.
 
     def get_last_updated(self, project):
-        '''Get the date of the last commit to project branches'''
+        """Get the date of the last commit to project branches"""
         updated_at = None
         for branch in project.getBranches():
             if updated_at is None:
@@ -95,6 +96,6 @@ class LaunchpadBackend(object):
         return updated_at
 
     def get_issues_number(self, project, states=STATES):
-        '''Count all active tasks for the project'''
+        """Count all active tasks for the project"""
         num = sum(1 for task in project.searchTasks(status=states))
         return num
