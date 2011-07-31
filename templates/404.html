@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}{{ block.super }} -- Not Found{% endblock %}
+
+{% block extrahead %}
+  <script>
+    var trace = [
+        "$ mount " + window.location.pathname
+      , "mount: can't find " + window.location.pathname + " /etc/fstab or /etc/mtab"
+    ].join("\n");
+
+    $(function(){
+      var ignore = function() { return false; };
+      $("#grepo").terminal(ignore, {
+          greetings: null
+        , prompt: "$"
+        , keydown: ignore
+        , keypress: ignore
+      }).echo(trace);
+    });
+  </script>
+{% endblock %}
