@@ -22,7 +22,7 @@ def render(data):
     """
     data = list(data)
 
-    summary = textwrap.wrap(data.pop(), width=72)
+    summary = textwrap.wrap(data.pop(), width=72) or ["--"]
     if len(summary) is 1:
         summary.insert(0, "")
 

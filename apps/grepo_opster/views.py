@@ -33,8 +33,9 @@ def stub(*args, **kwargs):
         raise opster.Abort(
             _("sorry, can't grepo anything without a language :(")
         )
+
     if not Language.objects\
-        .filter(Q(slug=language) | Q(name=language)).exists():
+        .filter(Q(slug=language.lower()) | Q(name=language)).exists():
         total = Language.objects.count()
 
         if total is 1:
@@ -61,8 +62,11 @@ def parse(request):
     opster.write.func_defaults = (stdout, )
     opster.err = lambda text: opster.write(text, out=stderr)
 
-    args, options = stub(argv=request.GET.getlist("argv[]"))
-    options["keywords"] = args
+    try:
+      args, options = stub(argv=request.GET.getlist("argv[]"))
+      options["keywords"] = args
+    except TypeError:
+      options = {}
 
     return {"options": options,
             "stderr": stderr.getvalue(),
