@@ -33,16 +33,19 @@ class LaunchpadBackend(object):
         self.launchpad = Launchpad.login_anonymously('grepo', 'production')
 
     def __iter__(self):
-        all_languages = Language.objects.all().values_list('name', flat=True)
+        all_languages = set(Language.objects.all().values_list('name', flat=True))
 
         for project in self.launchpad.projects:
             # Since Launchpad allows almost *anything* in the
             # `programming language` field, we are forced to pick only
             # those repositories, which have a programming language we
             # know.
-            languages = re.split(r"[,;/ ]+",
-                                 getattr(project, "programming_language", ""))
-            languages = set(l.strip().title() for l in languages)
+            languages = getattr(project, 'programming_language', '')
+            if not languages:
+                continue
+                
+            languages = re.split(r"[,;/ ]+", languages)
+            languages = set(lang.strip().title() for lang in languages)
 
             # Hopefully the intersections will yield a non-empty list.
             languages &= all_languages
