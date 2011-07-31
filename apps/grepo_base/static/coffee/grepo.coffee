@@ -74,14 +74,14 @@ $ ->
   $("#down").click -> grepo.el.scroll(  12 * 5 )
   $("#up").click   -> grepo.el.scroll(-(12 * 5))
 
-  grepo.el.echo "  grepo -l LANGUAGE [-o] RESULTS [KEYWORDS]"
+  grepo.el.echo "  Usage: grepo -l LANGUAGE [-o] RESULTS [KEYWORDS]"
   grepo.el.echo " "
   grepo.el.echo "  grepo helps you find open-source projects to contribute to."
   grepo.el.echo " "
   grepo.el.echo "  Simply specify the programming language and grepo will output"
   grepo.el.echo "  a list projects that need your help most."
   grepo.el.echo " "
-  grepo.el.echo "  options:"
+  grepo.el.echo "  Options:"
   grepo.el.echo " "
   grepo.el.echo "  -l --language  programming language you want to grepo for"
   grepo.el.echo "  -o --only      maximum number of projects to look up (default: 20)"
