@@ -8,7 +8,7 @@ from datetime import timedelta
 from celery.decorators import periodic_task, task
 
 from grepo_base.backends import get_backends
-from grepo_base.models import Repository, Language
+from grepo_base.models import Language, Repository
 
 
 @task
@@ -23,6 +23,7 @@ def update_backend(backend):
             r = Repository.objects.get(url=data["url"])
         except Repository.DoesNotExist:
             r = Repository()
+
         [setattr(r, k, data[k]) for k in data]
 
         r.save()
@@ -37,4 +38,4 @@ def update_backend(backend):
 def update_world():
     """Update **all** repositories for **all** backends."""
     for backend in get_backends():
-        update_backend.apply_async(args=[backend], serializer="pickle")
+        update_backend.apply_async(args=[backend])

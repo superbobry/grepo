@@ -26,8 +26,6 @@ class Language(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        self.name = self.name.title()
-
         if not self.slug:
             self.slug = slugify(self.name)
 

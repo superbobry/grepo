@@ -43,7 +43,7 @@ class LaunchpadBackend(object):
             languages = getattr(project, 'programming_language', '')
             if not languages:
                 continue
-                
+
             languages = re.split(r"[,;/ ]+", languages)
             languages = set(lang.strip().title() for lang in languages)
 
@@ -60,6 +60,7 @@ class LaunchpadBackend(object):
                 'languages': languages,
                 'score': self.calculate_score(project),
                 'created_at': project.date_created,
+                'updated_at': self.get_last_updated(project)
             }
 
     def calculate_score(self, project):
