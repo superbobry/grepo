@@ -37,4 +37,4 @@ def update_backend(backend):
 def update_world():
     """Update **all** repositories for **all** backends."""
     for backend in get_backends():
-        update_backend.apply_async(args=(backend,))
+        update_backend.apply_async(args=[backend], serializer="pickle")

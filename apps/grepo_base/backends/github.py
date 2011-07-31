@@ -59,7 +59,9 @@ class GithubBackend(object):
                     break
 
                 for repository in repositories:
-                    if not repository["language"]:
+                    if (not repository["language"] or
+                        repository["fork"] or
+                        repository["private"]):
                         continue
 
                     # Note: `source` and `language` field should be handled
