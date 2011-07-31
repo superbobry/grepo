@@ -63,10 +63,10 @@ def parse(request):
     opster.err = lambda text: opster.write(text, out=stderr)
 
     try:
-      args, options = stub(argv=request.GET.getlist("argv[]"))
-      options["keywords"] = args
+        args, options = stub(argv=request.GET.getlist("argv[]"))
+        options["keywords"] = args
     except TypeError:
-      options = {}
+        options = {}
 
     return {"options": options,
             "stderr": stderr.getvalue(),
