@@ -21,11 +21,13 @@ def update_backend(backend):
 
     for data in backend:
         languages = [all_languages[l] for l in data.pop("languages")]
-        try:
-            r = Repository.objects.get(url=data["url"])
-        except Repository.DoesNotExist:
-            r = Repository()
-
+        #try:
+            #r = Repository.objects.get(url=data["url"])
+        #except Repository.DoesNotExist:
+            #r = Repository()
+        
+        r = Repository.objects.get_or_create(url=data["url"])
+        
         [setattr(r, k, data[k]) for k in data]
 
         r.save()

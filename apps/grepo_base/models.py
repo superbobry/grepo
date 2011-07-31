@@ -53,6 +53,3 @@ class Repository(models.Model):
     def __unicode__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        self.updated_at = datetime.now()
-        super(Repository, self).save(*args, **kwargs)
