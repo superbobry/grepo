@@ -30,8 +30,8 @@ opster.sysname = lambda *args: settings.GREPO_NAME
 def stub(*args, **kwargs):
     """grepo helps you find open-source projects to contribute to.
 
-    Simply specify the programming language and grepo will output
-    a list projects that need your help most.
+Simply specify the programming language and grepo will output
+a list projects that need your help most.
     """
     language = kwargs["language"].title()
     if not language:

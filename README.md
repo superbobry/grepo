@@ -43,7 +43,10 @@ Usage
     $ grepo --help
     grepo -l LANGUAGE [-o] RESULTS [KEYWORDS]
 
-    (no help text available)
+    grepo helps you find open-source projects to contribute to.
+
+    Simply specify the programming language and grepo will output
+    a list projects that need your help most.
 
     options:
 
