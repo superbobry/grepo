@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from os import path
+
 from bundle_config import config
 
 DEBUG = False
@@ -39,3 +41,6 @@ BROKER_HOST = REDIS_HOST
 BROKER_PORT = REDIS_PORT
 BROKER_PASSWORD = REDIS_PASSWORD
 BROKER_VHOST = REDIS_DB
+
+
+LP_DIR = path.join(config["core"]["data_directory"], "lp_cache")

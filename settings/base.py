@@ -122,6 +122,7 @@ GREPO_BACKENDS = [
     "grepo_base.backends.lp.LaunchpadBackend",
 ]
 
+LP_DIR = None
 
 # -- grepo_opster
 

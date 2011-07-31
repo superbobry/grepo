@@ -11,6 +11,8 @@
 import re
 import posixpath
 
+from django.conf import settings
+
 from launchpadlib.launchpad import Launchpad
 
 from grepo_base.models import Language
@@ -30,7 +32,8 @@ class LaunchpadBackend(object):
     delay = 0.1
 
     def __init__(self):
-        self.launchpad = Launchpad.login_anonymously('grepo', 'production')
+        self.launchpad = Launchpad.login_anonymously('grepo', 'production',
+                                                     settings.LP_DIR)
 
     def __iter__(self):
         all_languages = set(Language.objects.all().values_list('name', flat=True))
