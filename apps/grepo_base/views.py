@@ -47,8 +47,7 @@ def search(request):
         return HttpResponseBadRequest()
 
     language = request.GET["language"].title()
-    keywords = request.GET.getlist("keywords")
-
+    keywords = request.GET.getlist("keywords[]")
     limit = request.GET.get("only", 20)
 
     repositories = Repository.objects.filter(

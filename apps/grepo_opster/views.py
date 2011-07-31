@@ -47,7 +47,7 @@ def stub(*args, **kwargs):
              .format(language, hint)
         )
 
-    return kwargs
+    return args, kwargs
 
 
 @require_GET
@@ -61,7 +61,8 @@ def parse(request):
     opster.write.func_defaults = (stdout, )
     opster.err = lambda text: opster.write(text, out=stderr)
 
-    options = stub(argv=request.GET.getlist("argv[]"))
+    args, options = stub(argv=request.GET.getlist("argv[]"))
+    options["keywords"] = args
 
     return {"options": options,
             "stderr": stderr.getvalue(),
